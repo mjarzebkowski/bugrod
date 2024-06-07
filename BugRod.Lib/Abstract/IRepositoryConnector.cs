@@ -13,17 +13,16 @@ namespace BugRod.Lib.Abstract
         Task<OperationStatus> ConnectToService(Repository repository);
         Task<OperationStatus> DisconnectService(Repository repository);
 
+        //Show
+        Task<IEnumerable<Issue>> GetIssues();
+
         // Manage
         Task<OperationStatus> AddIssue(Repository repository, Issue bug);
         Task<OperationStatus> ModifyIssue(Repository repository, Issue bug);
         Task<OperationStatus> CloseIssue(Repository repository, Issue bug);
         Task<IEnumerable<OperationStatus>> ExportIssue(Repository sourceRepository, IEnumerable<Issue> bugs);
-        Task<IEnumerable<OperationStatus>> ImportIssue(Repository destinationRepository, File fromFile);
+        Task<IEnumerable<OperationStatus>> ImportIssue(Repository destinationRepository, string fromFilePath);
     }
 
-    enum OperationStatus : byte
-    {
-        Success = 1,
-        Fail    = 2
-    }
+
 }

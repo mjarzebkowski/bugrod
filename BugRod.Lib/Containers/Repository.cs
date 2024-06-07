@@ -11,13 +11,9 @@ namespace BugRod.Lib.Containers
         public string Name { get; set; }
         public string Description { get; set; }
         public string WebAddress { get; set; } // IP or WebName including port
-
+        public AuthenticationType AuthenticationType { get; set; }
 
     }
 
-    enum AuthenticationType : byte
-    {
-        Token           = 1,
-        LoginPassword   = 2,
-    }
+
 }
