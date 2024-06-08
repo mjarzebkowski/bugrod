@@ -12,7 +12,7 @@ namespace BugRod.Lib.Containers
         Fail = 2
     }
 
-    enum AuthenticationType : byte
+    public enum AuthenticationType : byte
     {
         Token = 1,
         LoginPassword = 2,
@@ -23,7 +23,6 @@ namespace BugRod.Lib.Containers
         GitLab = 1,
         GitHub = 2,
         //Bitbucket = 3,
-        //GiTea = 4
         // ...etc
     }
 }

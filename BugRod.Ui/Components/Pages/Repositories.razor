@@ -1,0 +1,59 @@
+﻿@page "/repositories"
+
+<h1>Repositories</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if (repositories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="add-repo">
+        <p>Add repository</p>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Repository Name</th>
+                <th>Description</th>
+                <th>Address</th>
+                <th>Auth type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var repository in repositories)
+            {
+                <tr>
+                    <td>@repository.Name</td>
+                    <td>@repository.Description</td>
+                    <td>@repository.WebAddress</td>
+                    <td>@repository.AuthenticationType</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Repository[]? repositories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate a loading indicator
+        await Task.Delay(500);
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        repositories = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = startDate.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        }).ToArray();
+    }
+
+
+}
