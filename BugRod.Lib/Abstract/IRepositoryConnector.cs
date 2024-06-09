@@ -7,7 +7,7 @@ using BugRod.Lib.Containers;
 
 namespace BugRod.Lib.Abstract
 {
-    internal interface IRepositoryConnector
+    public interface IRepositoryConnector
     {
         // General
         Task<OperationStatus> ConnectToService(Repository repository);

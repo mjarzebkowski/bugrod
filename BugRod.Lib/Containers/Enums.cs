@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BugRod.Lib.Containers
 {
-    enum OperationStatus : byte
+    public enum OperationStatus : byte
     {
         Success = 1,
         Fail = 2
@@ -18,7 +18,7 @@ namespace BugRod.Lib.Containers
         LoginPassword = 2,
     }
 
-    enum RepositoryType
+    public enum RepositoryType
     {
         GitLab = 1,
         GitHub = 2,

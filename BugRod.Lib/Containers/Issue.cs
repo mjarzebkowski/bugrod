@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BugRod.Lib.Containers
 {
-    internal class Issue
+    public class Issue
     {
         public int Id { get; set; }
         public string Name { get; set; }
