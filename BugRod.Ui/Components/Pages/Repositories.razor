@@ -4,15 +4,30 @@
 
 <p>This component demonstrates showing data.</p>
 
+<p>Add Repository</p>
+
+
+        <Label Text="Add repository" 
+               FontSize="24"
+               HorizontalOptions="Center"
+               VerticalOptions="StartAndExpand" />
+
+@*         <Entry x:Name="nameEntry" Placeholder="Repository Name" />
+        <Entry x:Name="webAddressEntry" Placeholder="Web Address" />
+        <Entry x:Name="repositoryTypeEntry" Placeholder="Repository Type" />
+        <Entry x:Name="descriptionEntry" Placeholder="Description" /> *@
+
+        <Button Text="Add Repository"
+                Clicked="AddRepository" />
+
+
 @if (repositories == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <div class="add-repo">
-        <p>Add repository</p>
-    </div>
+
 
     <table class="table">
         <thead>
@@ -30,7 +45,7 @@ else
                     <td>@repository.Name</td>
                     <td>@repository.Description</td>
                     <td>@repository.WebAddress</td>
-                    <td>@repository.AuthenticationType</td>
+                    <td>@repository.RepositoryType</td>
                 </tr>
             }
         </tbody>
@@ -38,22 +53,57 @@ else
 }
 
 @code {
-    private Repository[]? repositories;
+    private Repository[] repositories;
 
     protected override async Task OnInitializedAsync()
     {
         // Simulate asynchronous loading to demonstrate a loading indicator
         await Task.Delay(500);
 
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        repositories = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
+
+    }
+
+    private async Task<Repository> AddRepository(string name, string webAddress, RepositoryType repositoryType, string? description)
+    {
+        Repository newRepo = new Repository(name, webAddress, repositoryType, description);
+        repositories.Append(newRepo);
+
+        return newRepo;
     }
 
 
+    private async Task RemoveRepository(Repository repository)
+    {
+
+    }
+
+    private async Task UpdateAllIssues()
+    {
+
+    }
+
+    private async Task AddIssue()
+    {
+
+    }
+
+    private async Task ModifyIssue()
+    {
+
+    }
+
+    private async Task CloseIssue()
+    {
+
+    }
+
+    private async Task ExportIssue(List<Issue> issues)
+    {
+
+    }
+
+    private async Task ImportIssue(IRepositoryConnector targetRepository)
+    {
+
+    }
 }

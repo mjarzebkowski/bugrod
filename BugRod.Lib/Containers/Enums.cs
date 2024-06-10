@@ -18,7 +18,7 @@ namespace BugRod.Lib.Containers
         LoginPassword = 2,
     }
 
-    public enum RepositoryType
+    public enum RepositoryType : byte
     {
         GitLab = 1,
         GitHub = 2,
