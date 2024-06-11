@@ -1,4 +1,6 @@
 ﻿@page "/repositories"
+@using BugRod.Lib.Containers
+@inject IJSRuntime IJRuntime
 
 <h1>Repositories</h1>
 
@@ -6,19 +8,23 @@
 
 <p>Add Repository</p>
 
+<EditForm Model="@repositoryModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-        <Label Text="Add repository" 
-               FontSize="24"
-               HorizontalOptions="Center"
-               VerticalOptions="StartAndExpand" />
+    <InputText id="name" @bind-Value="repositoryModel.Name" placeholder="Name" />
+    <InputText id="webAddress" @bind-Value="repositoryModel.WebAddress" placeholder="Web Address" />
+    <InputTextArea id="description" @bind-Value="repositoryModel.Description" placeholder="Description" />
 
-@*         <Entry x:Name="nameEntry" Placeholder="Repository Name" />
-        <Entry x:Name="webAddressEntry" Placeholder="Web Address" />
-        <Entry x:Name="repositoryTypeEntry" Placeholder="Repository Type" />
-        <Entry x:Name="descriptionEntry" Placeholder="Description" /> *@
+    <InputSelect id="repositoryType" @bind-Value="repositoryModel.RepositoryType">
+        <option value="GitLab">GitLab</option>
+        <option value="GitHub">GitHub</option>
+    </InputSelect>
 
-        <Button Text="Add Repository" class="btn btn-primary"
-                Clicked="AddRepository" >Add Repository</Button>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</EditForm>
+
+
 
 
 @if (repositories == null)
@@ -36,6 +42,7 @@ else
                 <th>Description</th>
                 <th>Address</th>
                 <th>Auth type</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -46,6 +53,7 @@ else
                     <td>@repository.Description</td>
                     <td>@repository.WebAddress</td>
                     <td>@repository.RepositoryType</td>
+                    <td><button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))" >Remove</button></td>
                 </tr>
             }
         </tbody>
@@ -53,57 +61,46 @@ else
 }
 
 @code {
-    private Repository[] repositories;
+    private List<Repository> repositories = new List<Repository>();
+    private RepositoryModelForm repositoryModel = new RepositoryModelForm();
 
     protected override async Task OnInitializedAsync()
     {
         // Simulate asynchronous loading to demonstrate a loading indicator
         await Task.Delay(500);
-
-
     }
 
     private async Task<Repository> AddRepository(string name, string webAddress, RepositoryType repositoryType, string? description)
     {
         Repository newRepo = new Repository(name, webAddress, repositoryType, description);
-        repositories.Append(newRepo);
-
+        repositories.Add(newRepo);
+        StateHasChanged();
         return newRepo;
     }
 
-
-    private async Task RemoveRepository(Repository repository)
+    private void HandleValidSubmit()
     {
+        AddRepository(
+            repositoryModel.Name,
+            repositoryModel.WebAddress,
+            repositoryModel.RepositoryType,
+            repositoryModel.Description
 
+        );
+
+        Console.WriteLine("Form submitted successfully.");
+    } 
+
+    private void RemoveRepository(Repository repository)
+    {
+        repositories.Remove(repository);
     }
 
-    private async Task UpdateAllIssues()
+    class RepositoryModelForm
     {
-
-    }
-
-    private async Task AddIssue()
-    {
-
-    }
-
-    private async Task ModifyIssue()
-    {
-
-    }
-
-    private async Task CloseIssue()
-    {
-
-    }
-
-    private async Task ExportIssue(List<Issue> issues)
-    {
-
-    }
-
-    private async Task ImportIssue(IRepositoryConnector targetRepository)
-    {
-
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public RepositoryType RepositoryType { get; set; }
+        public string? WebAddress { get; set; }
     }
 }
