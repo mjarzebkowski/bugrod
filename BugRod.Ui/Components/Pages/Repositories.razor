@@ -24,9 +24,6 @@
     <button class="btn btn-primary" type="submit">Submit</button>
 </EditForm>
 
-
-
-
 @if (repositories == null)
 {
     <p><em>Loading...</em></p>
@@ -55,13 +52,32 @@ else
                     <td>@repository.RepositoryType</td>
                     <td><button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))" >Remove</button></td>
                 </tr>
+                <div id="issue table">
+                    <table>
+                        <thead>
+                        <th>Issue ID</th>
+                        <th>Issue Name</th>
+                        <th>Issue Status</th>
+                        <th>Issue Control</th>
+                        </thead>
+                        <tbody>
+                        <td>@repository.Name</td>
+                        <td>@repository.Description</td>
+                        <td>@repository.WebAddress</td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))">Close</button>
+                            <button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))">Modify</button>
+                        </td>
+                        </tbody>
+                    </table>
+                </div>
             }
         </tbody>
     </table>
 }
 
 @code {
-    private List<Repository> repositories = new List<Repository>();
+    private static List<Repository> repositories = new List<Repository>();
     private RepositoryModelForm repositoryModel = new RepositoryModelForm();
 
     protected override async Task OnInitializedAsync()
@@ -70,23 +86,23 @@ else
         await Task.Delay(500);
     }
 
-    private async Task<Repository> AddRepository(string name, string webAddress, RepositoryType repositoryType, string? description)
-    {
-        Repository newRepo = new Repository(name, webAddress, repositoryType, description);
-        repositories.Add(newRepo);
-        StateHasChanged();
-        return newRepo;
-    }
+    // private async Task<Repository> AddRepository(string name, string webAddress, RepositoryType repositoryType, string? description)
+    // {
+    //     Repository newRepo = new Repository(name, webAddress, repositoryType, description);
+    //     repositories.Add(newRepo);
+    //     StateHasChanged();
+    //     return newRepo;
+    // }
 
     private void HandleValidSubmit()
     {
-        AddRepository(
+        var repo = RepositoryFactory.CreateRepository(
+            repositoryModel.RepositoryType,
             repositoryModel.Name,
             repositoryModel.WebAddress,
-            repositoryModel.RepositoryType,
             repositoryModel.Description
-
         );
+        repositories.Add(repo);
 
         Console.WriteLine("Form submitted successfully.");
     } 
@@ -102,5 +118,65 @@ else
         public string Description { get; set; }
         public RepositoryType RepositoryType { get; set; }
         public string? WebAddress { get; set; }
+
+        public RepositoryModelForm()
+        {
+            try
+            {
+                repo = null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public RepositoryModelForm(string name, string webAddress, RepositoryType repositoryType, string description)
+        {
+            try
+            {
+                if (repo == null)
+                {
+                    // repo = new Repository(name, webAddress, repositoryType, description);
+                    // repositories.Add(repo);
+
+                    var repo = RepositoryFactory.CreateRepository(repositoryType, name, webAddress, description);
+                    repositories.Add(repo);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            // else update
+        }
+
+        public Repository? repo { get; set; }
+        public bool IsIssuesVisible { get; set; }
+    }
+
+    private void RemoveRepository(RepositoryModelForm repository)
+    {
+        try
+        {
+            // repositories.Remove(repository);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    private void ToggleIssues(RepositoryModelForm repository)
+    {
+        try
+        {
+            repository.IsIssuesVisible = !repository.IsIssuesVisible;
+            // StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
 }
