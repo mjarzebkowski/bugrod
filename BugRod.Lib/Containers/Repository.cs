@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BugRod.Lib.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace BugRod.Lib.Containers
 {
-    public class Repository
+    public abstract class Repository
     {
         public string Name { get; set; }
         public string? Description { get; set; }
         public string WebAddress { get; set; } // IP or WebName including port
         public RepositoryType RepositoryType { get; set; }
-        public List<Issue> Issues { get; private set; }
+        public List<Issue> Issues { get; private set; } = new List<Issue>();
 
-        public Repository(string name, string webAddress, RepositoryType repositoryType, string? Description)
+        public Repository(string name, string webAddress, RepositoryType repositoryType, string Description)
         {
             this.Name = name;
             this.WebAddress = webAddress;
@@ -22,10 +23,6 @@ namespace BugRod.Lib.Containers
             this.Description = Description;
         }
 
-
-
-
-
-
-    }
+        public abstract IRepositoryConnector GetConnector();
+        }
 }

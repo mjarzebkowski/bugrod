@@ -8,15 +8,22 @@ using System.Threading.Tasks;
 
 namespace BugRod.Lib
 {
-    public class GitHubConnector : Repository, IRepositoryConnector
+    public class GitHubRepository : Repository
     {
-        public GitHubConnector(string name, string webAddress, RepositoryType repositoryType, string? description)
+        public GitHubRepository(string name, string webAddress, RepositoryType repositoryType, string description)
                 : base(name, webAddress, repositoryType, description)
         {
 
         }
 
+        public override IRepositoryConnector GetConnector()
+        {
+            throw new NotImplementedException();
+        }
+    }
 
+    public class GitHubRepositoryConnector : IRepositoryConnector
+    {
         public Task<OperationStatus> AddIssue(Repository repository, Issue bug)
         {
             throw new NotImplementedException();
