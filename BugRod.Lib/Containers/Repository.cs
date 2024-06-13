@@ -13,14 +13,18 @@ namespace BugRod.Lib.Containers
         public string? Description { get; set; }
         public string WebAddress { get; set; } // IP or WebName including port
         public RepositoryType RepositoryType { get; set; }
-        public List<Issue> Issues { get; private set; } = new List<Issue>();
+        public string? Token { get; set; }
+        public string? Login { get; set; }
+        public string? Password { get; set; }
+        public List<Issue> Issues { get; protected set; } = new List<Issue>();
 
-        public Repository(string name, string webAddress, RepositoryType repositoryType, string Description)
+        public Repository(string name, string webAddress, RepositoryType repositoryType, string description, string token)
         {
             this.Name = name;
             this.WebAddress = webAddress;
             this.RepositoryType = repositoryType;
-            this.Description = Description;
+            this.Description = description;
+            this.Token = token;
         }
 
         public abstract IRepositoryConnector GetConnector();

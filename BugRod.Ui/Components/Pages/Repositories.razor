@@ -1,6 +1,8 @@
 ﻿@page "/repositories"
 @using BugRod.Lib.Containers
+@using BugRod.Lib.NetworkConnector
 @inject IJSRuntime IJRuntime
+@inject IConnectionClient ConnectionClient
 
 <h1>Repositories</h1>
 
@@ -15,6 +17,7 @@
     <InputText id="name" @bind-Value="repositoryModel.Name" placeholder="Name" />
     <InputText id="webAddress" @bind-Value="repositoryModel.WebAddress" placeholder="Web Address" />
     <InputTextArea id="description" @bind-Value="repositoryModel.Description" placeholder="Description" />
+    <InputTextArea id="token" @bind-Value="repositoryModel.Token" placeholder="Token" />
 
     <InputSelect id="repositoryType" @bind-Value="repositoryModel.RepositoryType">
         <option value="GitLab">GitLab</option>
@@ -38,7 +41,7 @@ else
                 <th>Repository Name</th>
                 <th>Description</th>
                 <th>Address</th>
-                <th>Auth type</th>
+                <th>Token</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -61,13 +64,17 @@ else
                         <th>Issue Control</th>
                         </thead>
                         <tbody>
-                        <td>@repository.Name</td>
-                        <td>@repository.Description</td>
-                        <td>@repository.WebAddress</td>
-                        <td>
-                            <button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))">Close</button>
-                            <button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))">Modify</button>
-                        </td>
+                            @foreach(var issue in repository.Issues)
+                            {
+                                <td>@issue.Id</td>
+                                <td>@issue.Name</td>
+                                <td>@issue.Description</td>
+                                <td>
+                                    <button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))">Close</button>
+                                    <button class="btn btn-primary" @onclick="(() => RemoveRepository(repository))">Modify</button>
+                                </td>
+                            }
+
                         </tbody>
                     </table>
                 </div>
@@ -78,49 +85,28 @@ else
 
 @code {
     private static List<Repository> repositories = new List<Repository>();
-    private RepositoryModelForm repositoryModel = new RepositoryModelForm();
+    private RepositoryModelForm repositoryModel;// = new RepositoryModelForm();
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate a loading indicator
+        repositoryModel = new RepositoryModelForm(ConnectionClient);
         await Task.Delay(500);
-    }
-
-    // private async Task<Repository> AddRepository(string name, string webAddress, RepositoryType repositoryType, string? description)
-    // {
-    //     Repository newRepo = new Repository(name, webAddress, repositoryType, description);
-    //     repositories.Add(newRepo);
-    //     StateHasChanged();
-    //     return newRepo;
-    // }
-
-    private void HandleValidSubmit()
-    {
-        var repo = RepositoryFactory.CreateRepository(
-            repositoryModel.RepositoryType,
-            repositoryModel.Name,
-            repositoryModel.WebAddress,
-            repositoryModel.Description
-        );
-        repositories.Add(repo);
-
-        Console.WriteLine("Form submitted successfully.");
-    } 
-
-    private void RemoveRepository(Repository repository)
-    {
-        repositories.Remove(repository);
     }
 
     class RepositoryModelForm
     {
+        public readonly IConnectionClient _connectionClient;
+
         public string Name { get; set; }
         public string Description { get; set; }
         public RepositoryType RepositoryType { get; set; }
-        public string? WebAddress { get; set; }
+        public string WebAddress { get; set; }
+        public string Token { get; set; }
 
-        public RepositoryModelForm()
-        {
+        public RepositoryModelForm(IConnectionClient connectionClient)
+        {                
+            _connectionClient = connectionClient;
+
             try
             {
                 repo = null;
@@ -131,7 +117,7 @@ else
             }
         }
 
-        public RepositoryModelForm(string name, string webAddress, RepositoryType repositoryType, string description)
+        public RepositoryModelForm(string name, string webAddress, RepositoryType repositoryType, string description, string token)
         {
             try
             {
@@ -140,7 +126,7 @@ else
                     // repo = new Repository(name, webAddress, repositoryType, description);
                     // repositories.Add(repo);
 
-                    var repo = RepositoryFactory.CreateRepository(repositoryType, name, webAddress, description);
+                    var repo = RepositoryFactory.CreateRepository(repositoryType, name, webAddress, description, token, _connectionClient);
                     repositories.Add(repo);
                 }
             }
@@ -151,8 +137,29 @@ else
             // else update
         }
 
-        public Repository? repo { get; set; }
+        public Repository repo { get; set; }
         public bool IsIssuesVisible { get; set; }
+    }
+
+
+    private void HandleValidSubmit()
+    {
+        var repo = RepositoryFactory.CreateRepository(
+            repositoryModel.RepositoryType,
+            repositoryModel.Name,
+            repositoryModel.WebAddress,
+            repositoryModel.Description,
+            repositoryModel.Token,
+            repositoryModel._connectionClient
+        );
+        repositories.Add(repo);
+
+        Console.WriteLine("Form submitted successfully.");
+    }
+
+    private void RemoveRepository(Repository repository)
+    {
+        repositories.Remove(repository);
     }
 
     private void RemoveRepository(RepositoryModelForm repository)

@@ -10,18 +10,18 @@ namespace BugRod.Lib.Abstract
     public interface IRepositoryConnector
     {
         // General
-        Task<OperationStatus> ConnectToService(Repository repository);
-        Task<OperationStatus> DisconnectService(Repository repository);
+        //Task<bool> ConnectToService(Repository repository);
+        //Task<bool> DisconnectService(Repository repository);
 
         //Show
-        Task<IEnumerable<Issue>> GetIssues();
+        Task<IEnumerable<Issue>> GetIssuesAsync(Repository repository);
 
         // Manage
-        Task<OperationStatus> AddIssue(Repository repository, Issue bug);
-        Task<OperationStatus> ModifyIssue(Repository repository, Issue bug);
-        Task<OperationStatus> CloseIssue(Repository repository, Issue bug);
-        Task<IEnumerable<OperationStatus>> ExportIssue(Repository sourceRepository, IEnumerable<Issue> bugs);
-        Task<IEnumerable<OperationStatus>> ImportIssue(Repository destinationRepository, string fromFilePath);
+        Task<bool> AddIssueAsync(Repository repository, string name, string description);
+        Task<bool> ModifyIssueAsync(Repository repository, Issue bug);
+        Task<bool> CloseIssueAsync(Repository repository, Issue bug);
+        Task<bool> ExportIssueAsync(Repository sourceRepository, IEnumerable<Issue> bugs);
+        Task<bool> ImportIssueAsync(Repository destinationRepository, string fromFilePath);
     }
 
 

@@ -8,6 +8,14 @@ namespace BugRod.Lib.Containers
 {
     public class Issue
     {
+        public Issue(int id, string name, string description, string state)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Description = description;
+            this.State = state;
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

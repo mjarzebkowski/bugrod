@@ -1,4 +1,4 @@
-﻿using BugRod.Ui.NetworkConnector;
+﻿using BugRod.Lib.NetworkConnector;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
