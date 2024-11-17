@@ -1,9 +1,10 @@
 ﻿@page "/repositories"
 @using BugRod.Lib.Containers
-@using BugRod.Lib.NetworkConnector
+@* @using BugRod.Lib.NetworkConnector
+ *@
 @inject IJSRuntime IJRuntime
-@inject IConnectionClient ConnectionClient
-
+@* @inject IConnectionClient ConnectionClient
+ *@
 <h1>Repositories</h1>
 
 <p>This component demonstrates showing data.</p>
@@ -89,13 +90,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        repositoryModel = new RepositoryModelForm(ConnectionClient);
+        repositoryModel = new RepositoryModelForm();
         await Task.Delay(500);
     }
 
     class RepositoryModelForm
     {
-        public readonly IConnectionClient _connectionClient;
+        public readonly HttpClient _connectionClient;
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -103,9 +104,9 @@ else
         public string WebAddress { get; set; }
         public string Token { get; set; }
 
-        public RepositoryModelForm(IConnectionClient connectionClient)
+        public RepositoryModelForm(/* IConnectionClient connectionClient */)
         {                
-            _connectionClient = connectionClient;
+            // _connectionClient = connectionClient;
 
             try
             {

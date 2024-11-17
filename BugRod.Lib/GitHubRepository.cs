@@ -1,6 +1,6 @@
 ﻿using BugRod.Lib.Abstract;
 using BugRod.Lib.Containers;
-using BugRod.Lib.NetworkConnector;
+//using BugRod.Lib.NetworkConnector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,14 @@ namespace BugRod.Lib
 {
     public class GitHubRepository : Repository
     {
-        private IConnectionClient _httpClient;
+        private HttpClient _httpClient;
 
-        public GitHubRepository(string name, string webAddress, RepositoryType repositoryType, string description, string token, IConnectionClient httpClient)
+        public GitHubRepository(string name,
+                                string webAddress,
+                                RepositoryType repositoryType,
+                                string description,
+                                string token,
+                                HttpClient httpClient)
                 : base(name, webAddress, repositoryType, description, token)
         {
             _httpClient = httpClient;

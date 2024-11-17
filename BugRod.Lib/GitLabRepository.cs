@@ -1,6 +1,6 @@
 ﻿using BugRod.Lib.Abstract;
 using BugRod.Lib.Containers;
-using BugRod.Lib.NetworkConnector;
+//using BugRod.Lib.NetworkConnector;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -17,8 +17,13 @@ namespace BugRod.Lib
 {
     public class GitLabRepository : Repository
     {
-        private IConnectionClient _httpClient;
-        public GitLabRepository(string name, string webAddress, RepositoryType repositoryType, string description, string token, IConnectionClient httpClient)
+        private HttpClient _httpClient;
+        public GitLabRepository(string name,
+                                string webAddress,
+                                RepositoryType repositoryType,
+                                string description,
+                                string token,
+                                HttpClient httpClient)
                 : base(name, webAddress, repositoryType, description, token)
         {
             _httpClient = httpClient;
@@ -39,9 +44,9 @@ namespace BugRod.Lib
 
     public class GitLabRepositoryConnector : IRepositoryConnector
     {
-        private IConnectionClient _httpClient;
+        private HttpClient _httpClient;
         private readonly string _token;
-        public GitLabRepositoryConnector(IConnectionClient httpClient)
+        public GitLabRepositoryConnector(HttpClient httpClient)
         {
             _httpClient = httpClient;
             //_token = this._token ?? string.Empty;

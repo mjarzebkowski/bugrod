@@ -1,5 +1,5 @@
 ﻿using BugRod.Lib.Containers;
-using BugRod.Lib.NetworkConnector;
+//using BugRod.Lib.NetworkConnector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,12 @@ namespace BugRod.Lib
 {
     public static class RepositoryFactory
     {
-        public static Repository CreateRepository(RepositoryType repositoryType, string name, string webAddress, string description, string token, IConnectionClient _connectionClient)
+        public static Repository CreateRepository(RepositoryType repositoryType,
+                                                  string name,
+                                                  string webAddress,
+                                                  string description,
+                                                  string token,
+                                                  HttpClient _connectionClient)
         {
 
             return repositoryType switch

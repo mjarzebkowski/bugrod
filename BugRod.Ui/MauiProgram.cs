@@ -1,4 +1,4 @@
-﻿using BugRod.Lib.NetworkConnector;
+﻿using BugRod.Lib.Abstract;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -21,8 +21,8 @@ namespace BugRod.Ui
                 });
 
             builder.Services.AddMauiBlazorWebView();
-            builder.Services.AddHttpClient<ConnectionClient>();
-            builder.Services.AddTransient<IConnectionClient, ConnectionClient>();
+            //builder.Services.AddHttpClient<IConnectionClient>();
+            //IServiceCollection serviceCollection = builder.Services.AddTransient<IConnectionClient, ConnectionClient>();
 
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();
